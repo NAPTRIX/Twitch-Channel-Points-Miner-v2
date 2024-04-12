@@ -99,8 +99,11 @@ class Twitch(object):
             main_page_request = requests.get(streamer.streamer_url, headers=headers)
             response = main_page_request.text
             regex_settings = "(https://static.twitchcdn.net/config/settings.*?js)"
-            settings_url = re.search(regex_settings, response).group(1)
-
+            try:
+                settings_url = re.search(regex_settings, response).group(1)
+            except AttribuiteError:
+                settings_url = re.search(regex_settings, response)
+                
             settings_request = requests.get(settings_url, headers=headers)
             response = settings_request.text
             regex_spade = '"spade_url":"(.*?)"'
